@@ -11,7 +11,7 @@ const reviewSchema = new Schema( {
     rating: {
         type: Number,
         min: 0,
-        max: 5,
+        max: 10,
         required: true,
     },
     markedAsSpam: { type: Boolean, default: false },
@@ -29,14 +29,14 @@ const movieSchema = new Schema( {
     },
     releaseDate: Date,
     description: { type: String, required: true },
-    ratings: [ { rating: { type: Number, min: 0, max: 5 }, owner: String } ],
+    ratings: [ { rating: { type: Number, min: 0, max: 10 }, owner: String } ],
     averageRating: Number,
     picture: String,
     addedBy: String, // userId / adminId
     deletedBy: String, // adminId
     deleted: { type: Boolean, default: false },
     reviews: { type: [ reviewSchema ], default: [ ] },
-} );
+}, { usePushEach: true } );
 
 /* eslint func-names : off */
 movieSchema.methods.createMovie = function( data ) {
@@ -89,6 +89,10 @@ movieSchema.methods.addRating = function( rating, author ) {
 };
 
 movieSchema.methods.updateRating = function ( newRating, index ) {
+    if ( newRating === 0 ) { // unrate movie
+        this.ratings.splice( index, 1 );
+        return;
+    }
     const currentRating = this.ratings[ index ];
     currentRating.rating = newRating;
 };

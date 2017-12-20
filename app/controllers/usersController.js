@@ -54,14 +54,18 @@ exports.addMovie = ( req, res ) => {
 
 exports.rateMovie = ( req, res ) => {
     const { movie } = req;
-    movie.addRating( req.body.rating );
-    movie.updateRating();
+    const { id } = req.user;
+    const { rating } = req.body;
+
+    updateRating( movie, rating, id );
+    movie.updateRatingAverage();
     saveChangesToModel( res, movie );
 };
 
 exports.reviewMovie = ( req, res ) => {
     const { movie } = req;
     const { username } = req.user;
+
     movie.addReview( req.body, username );
     updateRating( movie, req.body.rating, username );
     saveChangesToModel( res, movie );
@@ -69,6 +73,7 @@ exports.reviewMovie = ( req, res ) => {
 
 exports.editMovie = ( req, res ) => {
     const { movie } = req;
+
     movie.editMovie( req.body );
     saveChangesToModel( res, movie );
 };

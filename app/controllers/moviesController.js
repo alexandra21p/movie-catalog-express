@@ -1,4 +1,4 @@
-const { extractObject, queryModel, queryBatch } = require( "../utilities" );
+const { queryModel, queryBatch } = require( "../utilities" );
 const mongoose = require( "mongoose" );
 
 const Movie = mongoose.model( "Movie" );
@@ -7,11 +7,7 @@ exports.getMovie = ( req, res ) => {
     if ( !movie ) {
         return res.notFound();
     }
-    return res.success( extractObject(
-        movie,
-        [ "title", "description", "director", "categories",
-            "cast", "rating", "releaseDate", "reviews", "picture" ],
-    ) );
+    return res.success( movie );
 };
 
 exports.getAllMovies = ( req, res ) => {

@@ -7,10 +7,11 @@ exports.extractObject = ( obj, keys ) => {
     return returnObj;
 };
 
-exports.updateRating = ( movie, rating, username ) => {
-    const ratingIndex = movie.getRatingIndex( username );
+exports.updateRating = ( movie, rating, userId ) => {
+    const ratingIndex = movie.getRatingIndex( userId );
+
     if ( ratingIndex === -1 ) {
-        movie.addRating( rating, username );
+        movie.addRating( rating, userId );
     } else {
         movie.updateRating( rating, ratingIndex );
     }
